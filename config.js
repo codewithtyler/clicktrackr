@@ -2,12 +2,12 @@ import themes from "daisyui/src/theming/themes";
 
 const config = {
   // REQUIRED
-  appName: "ShipFast",
+  appName: "ClickTrackr",
   // REQUIRED: a short description of your app for SEO tags (can be overwritten)
   appDescription:
-    "The NextJS boilerplate with all you need to build your SaaS, AI tool, or any other web app.",
+    "ClickTrackr is an intuitive tool for tracking, managing, and optimizing affiliate links to boost your revenue. Enhance your affiliate marketing efficiency with robust analytics and seamless integration.",
   // REQUIRED (no https://, not trialing slash at the end, just the naked domain)
-  domainName: "shipfa.st",
+  domainName: "clicktrackr.io",
   crisp: {
     // Crisp website ID. IF YOU DON'T USE CRISP: just remove this => Then add a support email in this config file (mailgun.supportEmail) otherwise customer support won't work.
     id: "",
@@ -18,26 +18,25 @@ const config = {
     // Create multiple plans in your Stripe dashboard, then add them here. You can add as many plans as you want, just make sure to add the priceId
     plans: [
       {
+        isFeatured: false,
         // REQUIRED — we use this to find the plan in the webhook (for instance if you want to update the user's credits based on the plan)
         priceId:
           process.env.NODE_ENV === "development"
             ? "price_1Niyy5AxyNprDp7iZIqEyD2h"
             : "price_456",
         //  REQUIRED - Name of the plan, displayed on the pricing page
-        name: "Starter",
+        name: "Essentials",
         // A friendly description of the plan, displayed on the pricing page. Tip: explain why this plan and not others
-        description: "Perfect for small projects",
+        description: "Designed for solo entrepreneurs",
         // The price you want to display, the one user will be charged on Stripe.
-        price: 79,
+        price: 19,
         // If you have an anchor price (i.e. $29) that you want to display crossed out, put it here. Otherwise, leave it empty
-        priceAnchor: 99,
+        priceAnchor: 39,
         features: [
-          {
-            name: "NextJS boilerplate",
-          },
-          { name: "User oauth" },
-          { name: "Database" },
-          { name: "Emails" },
+          { name: "Up to 100 affiliate links" },
+          { name: "Link Analytics & Reporting" },
+          { name: "Single User Access" },
+          { name: "Email Support" },
         ],
       },
       {
@@ -47,21 +46,35 @@ const config = {
           process.env.NODE_ENV === "development"
             ? "price_1O5KtcAxyNprDp7iftKnrrpw"
             : "price_456",
-        name: "Advanced",
-        description: "You need more power",
-        price: 99,
-        priceAnchor: 149,
+        name: "Professional",
+        description: "Tailored for small teams",
+        price: 39,
+        priceAnchor: 59,
         features: [
-          {
-            name: "NextJS boilerplate",
-          },
-          { name: "User oauth" },
-          { name: "Database" },
-          { name: "Emails" },
-          { name: "1 year of updates" },
-          { name: "24/7 support" },
+          { name: "Up to 300 affiliate links" },
+          { name: "Everything in Essentials Plan" },
+          { name: "Up to 3 user accounts" },
+          { name: "Priority Email Support" },
+          // { name: "Custom Domains for Link Shortening" },
+          // { name: "Integration with Major Affiliate Networks" },
         ],
       },
+      {
+        isFeatured: false,
+        priceId:
+          process.env.NODE_ENV === "development"
+            ? "price_1O5KtcAxyNprDp7iftKnrrpw"
+            : "price_456",
+        name: "Enterprise",
+        description: "Designed for large teams",
+        price: 69,
+        priceAnchor: 89,
+        features: [
+          { name: "Unlimited affiliate links" },
+          { name: "Everything in Professional Plan" },
+          { name: "Unlimited user accounts" }
+        ],
+      }
     ],
   },
   aws: {
