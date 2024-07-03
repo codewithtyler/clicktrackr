@@ -15,6 +15,8 @@ const config = {
     onlyShowOnRoutes: ["/"],
   },
   stripe: {
+    // Used to determine what text to say i.e. /month vs /year vs USD
+    subscriptionPricing: true,
     // Create multiple plans in your Stripe dashboard, then add them here. You can add as many plans as you want, just make sure to add the priceId
     plans: [
       {
@@ -32,6 +34,10 @@ const config = {
         price: 19,
         // If you have an anchor price (i.e. $29) that you want to display crossed out, put it here. Otherwise, leave it empty
         priceAnchor: 39,
+        // The price you want to display for your annual pricing. If you want to charge a one time fee then leave this empty
+        annualPrice: 199,
+        // If you have an anhor price for the annual pricing, put it here. Otherwise, leave it empty
+        annualPriceAnchor: 399, 
         features: [
           { name: "Up to 100 affiliate links" },
           { name: "Link Analytics & Reporting" },
@@ -50,6 +56,8 @@ const config = {
         description: "Tailored for small teams",
         price: 39,
         priceAnchor: 59,
+        annualPrice: 399,
+        annualPriceAnchor: 599,
         features: [
           { name: "Up to 300 affiliate links" },
           { name: "Everything in Essentials Plan" },
@@ -63,12 +71,14 @@ const config = {
         isFeatured: false,
         priceId:
           process.env.NODE_ENV === "development"
-            ? "price_1O5KtcAxyNprDp7iftKnrrpw"
+            ? "price_1M5KtcAxyNprDp7iftKnrrpw"
             : "price_456",
         name: "Enterprise",
         description: "Designed for large teams",
         price: 69,
         priceAnchor: 89,
+        annualPrice: 699,
+        annualPriceAnchor: 899,
         features: [
           { name: "Unlimited affiliate links" },
           { name: "Everything in Professional Plan" },
