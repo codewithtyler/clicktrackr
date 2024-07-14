@@ -15,8 +15,8 @@ const config = {
     onlyShowOnRoutes: ["/"],
   },
   stripe: {
-    // Used to determine what text to say i.e. /month vs /year vs USD
-    subscriptionPricing: true,
+    // Used to determine what text to say i.e. /month vs /year vs USD - options are 'subscription' or 'payment'
+    mode: 'subscription', 
     // Create multiple plans in your Stripe dashboard, then add them here. You can add as many plans as you want, just make sure to add the priceId
     plans: [
       {
@@ -27,9 +27,9 @@ const config = {
             ? "price_1Niyy5AxyNprDp7iZIqEyD2h"
             : "price_456",
         //  REQUIRED - Name of the plan, displayed on the pricing page
-        name: "Essentials",
+        name: "Basic",
         // A friendly description of the plan, displayed on the pricing page. Tip: explain why this plan and not others
-        description: "Designed for solo entrepreneurs",
+        description: "Essential features you need to get started",
         // The price you want to display, the one user will be charged on Stripe.
         price: 19,
         // If you have an anchor price (i.e. $29) that you want to display crossed out, put it here. Otherwise, leave it empty
@@ -42,7 +42,6 @@ const config = {
           { name: "Up to 100 affiliate links" },
           { name: "Link Analytics & Reporting" },
           { name: "Single User Access" },
-          { name: "Email Support" },
         ],
       },
       {
@@ -52,17 +51,18 @@ const config = {
           process.env.NODE_ENV === "development"
             ? "price_1O5KtcAxyNprDp7iftKnrrpw"
             : "price_456",
-        name: "Professional",
-        description: "Tailored for small teams",
+        name: "Pro",
+        description: "Perfect for owners of small & medium businesses",
         price: 39,
         priceAnchor: 59,
         annualPrice: 399,
         annualPriceAnchor: 599,
         features: [
-          { name: "Up to 300 affiliate links" },
           { name: "Everything in Essentials Plan" },
+          { name: "Up to 500 affiliate links" },
           { name: "Up to 3 user accounts" },
-          { name: "Priority Email Support" },
+          { name: "Single custom domain" },
+          { name: "Email support" },
           // { name: "Custom Domains for Link Shortening" },
           // { name: "Integration with Major Affiliate Networks" },
         ],
@@ -73,16 +73,21 @@ const config = {
           process.env.NODE_ENV === "development"
             ? "price_1M5KtcAxyNprDp7iftKnrrpw"
             : "price_456",
-        name: "Enterprise",
-        description: "Designed for large teams",
+        name: "Executive",
+        description: "Advanced features for large teams and businesses",
         price: 69,
         priceAnchor: 89,
         annualPrice: 699,
         annualPriceAnchor: 899,
         features: [
+          { name: "Everything in Pro Plan" },
           { name: "Unlimited affiliate links" },
-          { name: "Everything in Professional Plan" },
-          { name: "Unlimited user accounts" }
+          { name: "Unlimited user accounts" },
+          { name: "Advanced reporting & analytics" },
+          { name: "Single custom domain for link shortening"},
+          { name: "Built-in affiliate program for your business" },
+          { name: "Unlimited custom domains for affiliate tracking" },
+          { name: "Priority support" }
         ],
       }
     ],

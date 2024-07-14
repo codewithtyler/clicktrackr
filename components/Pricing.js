@@ -21,7 +21,7 @@ const Pricing = () => {
           </h2>
         </div>
 
-        {config.stripe.subscriptionPricing && (
+        {config.stripe.config.stripe.mode  == 'subscription' && (
           <div className="mt-8 mb-8 flex justify-center">
             {/* Toggle Switch */}
             <label className="flex items-center space-x-3">
@@ -68,7 +68,7 @@ const Pricing = () => {
                   </div>
                 </div>
                 <div className="flex gap-2">
-                  {config.stripe.subscriptionPricing ? (
+                  {config.stripe.config.stripe.mode  == 'subscription' ? (
                     pricingType === "monthly" && plan.priceAnchor ? (
                       <div className="flex flex-col justify-end mb-[4px] text-lg ">
                         <p className="relative">
@@ -103,11 +103,11 @@ const Pricing = () => {
                     )
                   )}
                   <p className={`text-5xl tracking-tight font-extrabold`}>
-                    ${config.stripe.subscriptionPricing ? (pricingType === "monthly" ? plan.price : plan.annualPrice) : plan.price}
+                    ${config.stripe.config.stripe.mode  == 'subscription' ? (pricingType === "monthly" ? plan.price : plan.annualPrice) : plan.price}
                   </p>
                   <div className="flex flex-col justify-end mb-[4px]">
                     <p className="text-xs text-base-content/60 font-semibold">
-                      {config.stripe.subscriptionPricing ? (pricingType === "monthly" ? "/month" : "/year") : "USD"}
+                      {config.stripe.config.stripe.mode  == 'subscription' ? (pricingType === "monthly" ? "/month" : "/year") : "USD"}
                     </p>
                   </div>
                 </div>
@@ -136,7 +136,7 @@ const Pricing = () => {
                 <div className="space-y-2">
                   <ButtonCheckout priceId={plan.priceId} buttonText={plan.name} />
 
-                  {!config.stripe.subscriptionPricing && (
+                  {!config.stripe.config.stripe.mode  == 'subscription' && (
                     <p className="flex items-center justify-center gap-2 text-sm text-center text-base-content/80 font-medium relative">
                       Pay once. Access forever.
                     </p>
