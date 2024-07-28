@@ -38,7 +38,7 @@ const Hero = () => {
           className="w-full"
           priority={true}
           width={500}
-          height={500}
+          height={600}
         />
       </div>
     </section>
