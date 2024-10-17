@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import config from "@/config";
 import ButtonCheckout from "./ButtonCheckout";
 
@@ -6,19 +9,54 @@ import ButtonCheckout from "./ButtonCheckout";
 // <ButtonCheckout /> renders a button that will redirect the user to Stripe checkout called the /api/stripe/create-checkout API endpoint with the correct priceId
 
 const Pricing = () => {
+  const [pricingType, setPricingType] = useState("monthly");
+
+  const handleToggleChange = (e) => {
+    setPricingType(e.target.checked ? "yearly" : "monthly");
+  };
+
+  const getPriceId = (plan) => {
+    if (config.stripe.mode === 'payment') {
+      return plan.priceId;
+    } else {
+      return pricingType === "monthly" ? plan.priceId : plan.priceIdAnnual;
+    }
+  };
+
   return (
     <section className="bg-base-200 overflow-hidden" id="pricing">
       <div className="py-24 px-8 max-w-5xl mx-auto">
         <div className="flex flex-col text-center w-full mb-20">
           <p className="font-medium text-primary mb-8">Pricing</p>
           <h2 className="font-bold text-3xl lg:text-5xl tracking-tight">
-          Achieve more with less effort by managing your affiliate links efficiently, allowing you to focus on growing your business!
+            Save hours of repetitive code and ship faster!
           </h2>
         </div>
 
+        {config.stripe.mode  == 'subscription' && (
+          <div className="mt-8 mb-8 flex justify-center">
+            {/* Toggle Switch */}
+            <label className="flex items-center space-x-3">
+              <span>Monthly</span>
+              <input 
+                type="checkbox" 
+                className="toggle toggle-primary" 
+                checked={pricingType === "yearly"} 
+                onChange={handleToggleChange} 
+              />
+              <span>Yearly</span>
+            </label>
+          </div>
+        )}
+
         <div className="relative flex justify-center flex-col lg:flex-row items-center lg:items-stretch gap-8">
-          {config.stripe.plans.map((plan) => (
-            <div key={plan.priceId} className="relative w-full max-w-lg">
+          {config.stripe.plans.map((plan) => {
+
+            const priceId = getPriceId(plan);
+            const mode = config.stripe.mode;
+
+            return (
+            <div key={priceId} className="relative w-full max-w-lg">
               {plan.isFeatured && (
                 <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20">
                   <span
@@ -47,7 +85,30 @@ const Pricing = () => {
                   </div>
                 </div>
                 <div className="flex gap-2">
-                  {plan.priceAnchor && (
+                {config.stripe.mode  == 'subscription'? (
+                    pricingType === "monthly" && plan.priceAnchor ? (
+                      <div className="flex flex-col justify-end mb-[4px] text-lg ">
+                        <p className="relative">
+                          <span className="absolute bg-base-content h-[1.5px] inset-x-0 top-[53%]"></span>
+                          <span className="text-base-content/80">
+                            ${plan.priceAnchor}
+                          </span>
+                        </p>
+                      </div>
+                    ) : (
+                      pricingType === "yearly" && plan.annualPriceAnchor && (
+                        <div className="flex flex-col justify-end mb-[4px] text-lg ">
+                          <p className="relative">
+                            <span className="absolute bg-base-content h-[1.5px] inset-x-0 top-[53%]"></span>
+                            <span className="text-base-content/80">
+                              ${plan.annualPriceAnchor}
+                            </span>
+                          </p>
+                        </div>
+                      )
+                    )
+                  ) : (  
+                  plan.priceAnchor && (
                     <div className="flex flex-col justify-end mb-[4px] text-lg ">
                       <p className="relative">
                         <span className="absolute bg-base-content h-[1.5px] inset-x-0 top-[53%]"></span>
@@ -56,13 +117,14 @@ const Pricing = () => {
                         </span>
                       </p>
                     </div>
+                    )
                   )}
                   <p className={`text-5xl tracking-tight font-extrabold`}>
-                    ${plan.price}
+                    ${config.stripe.mode  == 'subscription' ? (pricingType === "monthly" ? plan.price : plan.annualPrice || null) : plan.price}
                   </p>
                   <div className="flex flex-col justify-end mb-[4px]">
-                    <p className="text-xs text-base-content/60 uppercase font-semibold">
-                      USD
+                    <p className="text-xs text-base-content/60 font-semibold">
+                      {config.stripe.mode  == 'subscription' ? (pricingType === "monthly" ? "/month" : "/year") : "USD"}
                     </p>
                   </div>
                 </div>
@@ -89,11 +151,19 @@ const Pricing = () => {
                   </ul>
                 )}
                 <div className="space-y-2">
-                  <ButtonCheckout priceId={plan.priceId} buttonText={plan.name} />
+
+                  <ButtonCheckout priceId={priceId} mode={mode} />
+
+                  {config.stripe.mode  == 'payment' && (
+                    <p className="flex items-center justify-center gap-2 text-sm text-center text-base-content/80 font-medium relative">
+                      Pay once. Access forever.
+                    </p>
+                  )}
                 </div>
               </div>
             </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>
