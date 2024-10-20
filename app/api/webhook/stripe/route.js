@@ -4,15 +4,29 @@ import Stripe from "stripe";
 import { SupabaseClient } from "@supabase/supabase-js";
 import configFile from "@/config";
 import { findCheckoutSession } from "@/libs/stripe";
+const stripeKey = process.env.STRIPE_SECRET_KEY;
+const stripeSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
-const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
+if (!stripeKey) {
+  console.log("STRIPE_SECRET_KEY is not set");
+}
+
+let stripe;
+if (stripeKey && stripeSecret) {
+  stripe = new Stripe(stripeKey);
+}
 
 // This is where we receive Stripe webhook events
 // It used to update the user data, send emails, etc...
 // By default, it'll store the user in the database
 // See more: https://shipfa.st/docs/features/payments
 export async function POST(req) {
+  // Return early if Stripe keys are not set
+  if (!stripeKey || !stripeSecret) {
+    console.log("Stripe integration is disabled");
+    return NextResponse.json({ error: "Stripe integration is disabled" }, { status: 503 });
+  }
+
   const body = await req.text();
 
   const signature = headers().get("stripe-signature");
@@ -23,7 +37,7 @@ export async function POST(req) {
 
   // verify Stripe event is legit
   try {
-    event = stripe.webhooks.constructEvent(body, signature, webhookSecret);
+    event = stripe.webhooks.constructEvent(body, signature, stripeSecret);
   } catch (err) {
     console.error(`Webhook signature verification failed. ${err.message}`);
     return NextResponse.json({ error: err.message }, { status: 400 });

@@ -82,7 +82,7 @@ const features = [
   {
     title: "Style",
     description:
-      "Components, animations & sections (like this features section), 20+ themes with daisyUI, automatic dark mode",
+      "Components, animations & sections (like this features section), automatic dark mode",
     svg: (
       <svg
         xmlns="http://www.w3.org/2000/svg"
